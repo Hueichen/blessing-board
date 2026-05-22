@@ -6,6 +6,21 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+<!-- 分享預覽設定 -->
+<title>給老闆的元氣補給站</title>
+<meta name="description" content="凝聚我們的心意，祝您早日康復">
+
+<!-- Open Graph (Facebook, LINE, etc) -->
+<meta property="og:title" content="給老闆的元氣補給站">
+<meta property="og:description" content="凝聚我們的心意，祝您早日康復">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="給老闆的元氣補給站">
+<meta name="twitter:description" content="凝聚我們的心意，祝您早日康復">
+
 <style>
 html {
   font-size: 16px;
@@ -390,6 +405,64 @@ textarea {
 }
 
 .avatar-option.selected::after {
+  display: flex;
+}
+
+/* 顏色選擇 */
+.color-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.color-option {
+  aspect-ratio: 1;
+  border: 3px solid #D9E7D6;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  min-height: 80px;
+}
+
+.color-option .color-name {
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: 600;
+}
+
+.color-option:hover {
+  transform: scale(1.05);
+  border-color: #93C47D;
+}
+
+.color-option.selected {
+  border-color: #6AA84F;
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(106, 168, 79, 0.4);
+}
+
+.color-option::after {
+  content: '✓';
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #6AA84F;
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.color-option.selected::after {
   display: flex;
 }
 
@@ -1139,6 +1212,30 @@ textarea {
     </div>
 
     <div class="form-group">
+      <label>選擇卡片顏色 *</label>
+      <div class="color-grid" id="colorGrid">
+        <div class="color-option" data-color="#FFF5F5" style="background: #FFF5F5;" onclick="selectColor('#FFF5F5')">
+          <span class="color-name">淡粉</span>
+        </div>
+        <div class="color-option" data-color="#F0F9FF" style="background: #F0F9FF;" onclick="selectColor('#F0F9FF')">
+          <span class="color-name">淡藍</span>
+        </div>
+        <div class="color-option" data-color="#F0FFF4" style="background: #F0FFF4;" onclick="selectColor('#F0FFF4')">
+          <span class="color-name">淡綠</span>
+        </div>
+        <div class="color-option" data-color="#FFFBEB" style="background: #FFFBEB;" onclick="selectColor('#FFFBEB')">
+          <span class="color-name">淡黃</span>
+        </div>
+        <div class="color-option" data-color="#FDF4FF" style="background: #FDF4FF;" onclick="selectColor('#FDF4FF')">
+          <span class="color-name">淡紫</span>
+        </div>
+        <div class="color-option" data-color="#FFF7ED" style="background: #FFF7ED;" onclick="selectColor('#FFF7ED')">
+          <span class="color-name">淡橙</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
       <label>選擇禮物 *</label>
       <div class="gift-grid" id="giftGrid">
         <div class="loading" style="grid-column: 1 / -1;">載入禮物中...</div>
@@ -1188,6 +1285,7 @@ var avatars = [];
 var gifts = [];
 var messages = [];
 var selectedAvatar = null;
+var selectedColor = null;
 var selectedGift = null;
 var selectedMessageType = null;
 
@@ -1342,6 +1440,16 @@ function selectAvatar(avatarId) {
   document.querySelector('.avatar-option[data-id="' + avatarId + '"]').classList.add('selected');
 }
 
+function selectColor(color) {
+  selectedColor = color;
+  
+  document.querySelectorAll('.color-option').forEach(function(opt) {
+    opt.classList.remove('selected');
+  });
+  
+  document.querySelector('.color-option[data-color="' + color + '"]').classList.add('selected');
+}
+
 function renderGifts() {
   var grid = document.getElementById('giftGrid');
   
@@ -1437,6 +1545,11 @@ function submitMessage() {
     return;
   }
   
+  if (!selectedColor) {
+    showCustomAlert('請選擇卡片顏色', '提醒', '⚠️');
+    return;
+  }
+  
   if (!selectedGift) {
     showCustomAlert('請選擇禮物', '提醒', '⚠️');
     return;
@@ -1464,7 +1577,7 @@ function submitMessage() {
     action: 'addMessage',
     timestamp: new Date().toISOString(),
     name: name,
-    color: '#FFFFFF',
+    color: selectedColor,
     avatar_id: selectedAvatar,
     gift_id: selectedGift,
     custom_message: giftMessage
@@ -1504,10 +1617,15 @@ function resetForm() {
   document.getElementById('giftMessageInput').value = '';
   
   selectedAvatar = null;
+  selectedColor = null;
   selectedGift = null;
   selectedMessageType = null;
   
   document.querySelectorAll('.avatar-option').forEach(function(opt) {
+    opt.classList.remove('selected');
+  });
+  
+  document.querySelectorAll('.color-option').forEach(function(opt) {
     opt.classList.remove('selected');
   });
   
@@ -1550,7 +1668,9 @@ function renderMessages() {
       minute: '2-digit'
     });
     
-    return '<div class="message-card">' +
+    var cardColor = msg.color || '#FFFFFF';
+    
+    return '<div class="message-card" style="background-color: ' + cardColor + ';">' +
       '<div class="card-header">' +
       '<img src="' + avatarUrl + '" alt="頭像" class="card-avatar" loading="lazy">' +
       '<div class="card-author-info">' +
