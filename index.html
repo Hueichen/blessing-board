@@ -1,0 +1,1577 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<style>
+html {
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 17px;
+  }
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  background: #F0F4F1;
+  min-height: 100vh;
+  padding: 20px;
+  position: relative;
+  -webkit-text-size-adjust: none;
+  -moz-text-size-adjust: none;
+  -ms-text-size-adjust: none;
+  text-size-adjust: none;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(47, 82, 51, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(106, 168, 79, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 40% 90%, rgba(144, 238, 144, 0.06) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.container {
+  position: relative;
+  z-index: 2;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 10px;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 40px;
+  color: #2F5233;
+}
+
+h1 {
+  font-size: 3rem;
+  margin-bottom: 12px;
+  color: #2F5233;
+  font-weight: 700;
+}
+
+.subtitle {
+  font-size: 1.3rem;
+  color: #6AA84F;
+  font-weight: 500;
+}
+
+/* 照片輪播區域 */
+.photo-carousel-section {
+  background: white;
+  border-radius: 20px;
+  padding: 50px 40px;
+  margin-bottom: 40px;
+  box-shadow: 0 10px 40px rgba(47, 82, 51, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.photo-carousel-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, #2F5233, #6AA84F, #93C47D);
+}
+
+.photo-carousel-section h3 {
+  text-align: center;
+  font-size: 1.8rem;
+  color: #2F5233;
+  margin-bottom: 40px;
+  font-weight: 600;
+}
+
+.carousel-container {
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.carousel-wrapper {
+  overflow: hidden;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+}
+
+.carousel-track {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+.carousel-slide {
+  min-width: 100%;
+  aspect-ratio: 16 / 10;
+}
+
+.carousel-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(47, 82, 51, 0.8);
+  color: white;
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  z-index: 10;
+}
+
+.carousel-btn:hover {
+  background: rgba(47, 82, 51, 1);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-btn.prev {
+  left: 20px;
+}
+
+.carousel-btn.next {
+  right: 20px;
+}
+
+.carousel-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #D9E7D6;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.indicator.active {
+  background: #6AA84F;
+  width: 32px;
+  border-radius: 6px;
+}
+
+/* 浮動新增留言按鈕 */
+.floating-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: linear-gradient(135deg, #6AA84F 0%, #93C47D 100%);
+  color: white;
+  border: none;
+  padding: 16px 28px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(106, 168, 79, 0.4);
+  transition: all 0.3s;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.floating-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(106, 168, 79, 0.5);
+}
+
+/* 留言表單彈窗 */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 800px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 28px;
+  color: #999;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.modal-close:hover {
+  background: #f0f0f0;
+  color: #333;
+}
+
+.modal-content h2 {
+  font-size: 1.8rem;
+  margin-bottom: 30px;
+  color: #2F5233;
+}
+
+.form-group {
+  margin-bottom: 24px;
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #2F5233;
+  font-size: 0.95rem;
+}
+
+input[type="text"],
+textarea,
+select {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #D9E7D6;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.3s;
+}
+
+input[type="text"]:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: #6AA84F;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* 頭像選擇 */
+.avatar-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 12px;
+}
+
+.avatar-option {
+  aspect-ratio: 1;
+  border: 3px solid #D9E7D6;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+  overflow: hidden;
+  background: #f5f5f5;
+  position: relative;
+}
+
+.avatar-option img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-option:hover {
+  transform: scale(1.05);
+  border-color: #93C47D;
+}
+
+.avatar-option.selected {
+  border-color: #6AA84F;
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(106, 168, 79, 0.4);
+}
+
+.avatar-option::after {
+  content: '✓';
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: #6AA84F;
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.avatar-option.selected::after {
+  display: flex;
+}
+
+/* 禮物選擇 */
+.gift-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 12px;
+}
+
+.gift-option {
+  border: 3px solid #D9E7D6;
+  border-radius: 12px;
+  padding: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-align: center;
+  background: white;
+  position: relative;
+}
+
+.gift-option img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  margin-bottom: 8px;
+}
+
+.gift-option .gift-name {
+  font-size: 0.85rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.gift-option:hover {
+  transform: translateY(-3px);
+  border-color: #93C47D;
+}
+
+.gift-option.selected {
+  border-color: #6AA84F;
+  background: #F8FCF7;
+  box-shadow: 0 4px 12px rgba(106, 168, 79, 0.3);
+}
+
+.gift-option::after {
+  content: '✓';
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #6AA84F;
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.gift-option.selected::after {
+  display: flex;
+}
+
+/* 禮物訊息選擇 */
+.gift-message-section {
+  display: none;
+  margin-top: 20px;
+}
+
+.gift-message-section.active {
+  display: block;
+}
+
+.message-type-select {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #D9E7D6;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-family: inherit;
+  background: white;
+  cursor: pointer;
+  transition: border-color 0.3s;
+  margin-bottom: 12px;
+}
+
+.message-type-select:focus {
+  outline: none;
+  border-color: #6AA84F;
+}
+
+.gift-message-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #D9E7D6;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-family: inherit;
+  min-height: 100px;
+  resize: vertical;
+  transition: border-color 0.3s;
+}
+
+.gift-message-input:focus {
+  outline: none;
+  border-color: #6AA84F;
+}
+
+/* 送出按鈕 */
+.submit-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #6AA84F 0%, #93C47D 100%);
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(106, 168, 79, 0.4);
+  margin-top: 10px;
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(106, 168, 79, 0.5);
+}
+
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 留言板區域 */
+.messages-section {
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 10px 40px rgba(47, 82, 51, 0.1);
+  margin-bottom: 100px;
+}
+
+.messages-section h2 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  color: #2F5233;
+  text-align: center;
+}
+
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 80px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #6AA84F;
+  display: block;
+}
+
+.stat-label {
+  color: #777;
+  font-size: 1.1rem;
+  margin-top: 4px;
+}
+
+.messages-grid {
+  column-count: 3;
+  column-gap: 30px;
+  margin-top: 30px;
+}
+
+/* 留言卡片 */
+.message-card {
+  background: white;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 4px 12px rgba(47, 82, 51, 0.08);
+  transition: all 0.3s;
+  border: 2px solid #F0F4F1;
+  position: relative;
+  break-inside: avoid;
+  margin-bottom: 30px;
+  display: inline-block;
+  width: 100%;
+}
+
+.message-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(47, 82, 51, 0.12);
+  border-color: #D9E7D6;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.card-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #D9E7D6;
+}
+
+.card-author-info {
+  flex: 1;
+}
+
+.card-author-name {
+  font-weight: 600;
+  color: #2F5233;
+  font-size: 1.15rem;
+  margin-bottom: 4px;
+}
+
+.card-timestamp {
+  font-size: 0.95rem;
+  color: #999;
+}
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding-top: 20px;
+  border-top: 1px solid #F0F4F1;
+}
+
+.card-gift-image {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.card-gift-message {
+  flex: 1;
+  font-size: 1.05rem;
+  color: #2F5233;
+  font-style: normal;
+  line-height: 1.7;
+  letter-spacing: 0.3px;
+}
+
+/* 載入中 */
+.loading {
+  text-align: center;
+  padding: 60px 20px;
+  color: #999;
+}
+
+.loading-spinner {
+  border: 3px solid #f0f0f0;
+  border-top: 3px solid #6AA84F;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #999;
+}
+
+.empty-state svg {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 20px;
+  opacity: 0.3;
+}
+
+.error-message {
+  background: #fee;
+  border: 2px solid #fcc;
+  color: #c33;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* RWD 響應式設計 */
+@media (max-width: 1024px) {
+  .container {
+    max-width: 100%;
+    padding: 0 15px;
+  }
+
+  .messages-grid {
+    column-count: 2;
+    column-gap: 25px;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: 15px 10px;
+  }
+
+  .container {
+    padding: 0 5px;
+  }
+
+  h1 {
+    font-size: 40px !important;
+    margin-bottom: 10px;
+  }
+
+  .subtitle {
+    font-size: 20px !important;
+  }
+  
+  .photo-carousel-section {
+    padding: 25px 15px;
+    margin-bottom: 25px;
+  }
+
+  .photo-carousel-section h3 {
+    font-size: 28px !important;
+    margin-bottom: 20px;
+  }
+
+  .carousel-btn {
+    width: 50px;
+    height: 50px;
+    font-size: 24px !important;
+  }
+
+  .carousel-btn.prev {
+    left: 5px;
+  }
+
+  .carousel-btn.next {
+    right: 5px;
+  }
+  
+  .modal-content {
+    padding: 25px 15px;
+    max-width: 100%;
+  }
+
+  .modal-content h2 {
+    font-size: 26px !important;
+  }
+
+  .avatar-grid {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 12px;
+  }
+
+  .gift-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 12px;
+  }
+  
+  .messages-section {
+    padding: 30px 15px;
+  }
+
+  .messages-section h2 {
+    font-size: 30px !important;
+    margin-bottom: 25px;
+  }
+  
+  .messages-grid {
+    column-count: 1;
+    column-gap: 0;
+  }
+
+  .message-card {
+    padding: 28px 22px !important;
+    margin-bottom: 22px !important;
+  }
+
+  .card-header {
+    gap: 14px !important;
+    margin-bottom: 20px !important;
+  }
+
+  .card-avatar {
+    width: 60px !important;
+    height: 60px !important;
+  }
+
+  .card-author-name {
+    font-size: 22px !important;
+    line-height: 1.4 !important;
+  }
+
+  .card-timestamp {
+    font-size: 16px !important;
+    margin-top: 6px !important;
+  }
+
+  .card-footer {
+    gap: 16px !important;
+    padding-top: 20px !important;
+  }
+
+  .card-gift-image {
+    width: 70px !important;
+    height: 70px !important;
+  }
+
+  .card-gift-message {
+    font-size: 20px !important;
+    line-height: 1.9 !important;
+    letter-spacing: 0.5px !important;
+  }
+  
+  .floating-btn {
+    bottom: 15px;
+    right: 15px;
+    padding: 16px 24px !important;
+    font-size: 18px !important;
+  }
+  
+  .stats {
+    gap: 50px;
+    margin-bottom: 35px;
+  }
+
+  .stat-number {
+    font-size: 48px !important;
+  }
+
+  .stat-label {
+    font-size: 18px !important;
+  }
+
+  label {
+    font-size: 18px !important;
+    margin-bottom: 12px;
+  }
+
+  input[type="text"],
+  textarea,
+  select {
+    font-size: 18px !important;
+    padding: 14px 16px !important;
+  }
+
+  .gift-option .gift-name {
+    font-size: 15px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 36px !important;
+  }
+
+  .subtitle {
+    font-size: 19px !important;
+  }
+
+  .photo-carousel-section h3 {
+    font-size: 26px !important;
+  }
+
+  .modal-content {
+    padding: 22px 15px;
+  }
+
+  .modal-content h2 {
+    font-size: 24px !important;
+  }
+
+  .avatar-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+
+  .gift-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .messages-section {
+    padding: 25px 12px;
+  }
+
+  .messages-section h2 {
+    font-size: 28px !important;
+  }
+
+  .message-card {
+    padding: 26px 20px !important;
+    margin-bottom: 20px !important;
+  }
+
+  .card-avatar {
+    width: 58px !important;
+    height: 58px !important;
+  }
+
+  .card-author-name {
+    font-size: 21px !important;
+  }
+
+  .card-timestamp {
+    font-size: 16px !important;
+  }
+
+  .card-gift-image {
+    width: 68px !important;
+    height: 68px !important;
+  }
+
+  .card-gift-message {
+    font-size: 19px !important;
+    line-height: 1.85 !important;
+  }
+
+  .floating-btn {
+    padding: 14px 22px !important;
+    font-size: 17px !important;
+  }
+
+  .stat-number {
+    font-size: 46px !important;
+  }
+
+  .stat-label {
+    font-size: 18px !important;
+  }
+
+  label {
+    font-size: 17px !important;
+  }
+
+  input[type="text"],
+  textarea,
+  select {
+    font-size: 17px !important;
+    padding: 13px 15px !important;
+  }
+
+  .custom-alert-content {
+    padding: 28px 22px;
+  }
+
+  .custom-alert-title {
+    font-size: 22px !important;
+  }
+
+  .custom-alert-message {
+    font-size: 17px !important;
+    line-height: 1.7;
+  }
+
+  .custom-alert-btn {
+    font-size: 17px !important;
+    padding: 13px 36px;
+  }
+}
+
+/* 自訂提示彈窗 */
+.custom-alert {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-alert.show {
+  display: flex;
+}
+
+.custom-alert-content {
+  background: white;
+  border-radius: 16px;
+  padding: 30px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  text-align: center;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.custom-alert-icon {
+  font-size: 3rem;
+  margin-bottom: 15px;
+}
+
+.custom-alert-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #2F5233;
+  margin-bottom: 10px;
+}
+
+.custom-alert-message {
+  font-size: 1rem;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.custom-alert-btn {
+  background: linear-gradient(135deg, #6AA84F 0%, #93C47D 100%);
+  color: white;
+  border: none;
+  padding: 12px 32px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.custom-alert-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(106, 168, 79, 0.4);
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>🌿 給老闆的元氣補給站 🌿</h1>
+    <p class="subtitle">凝聚我們的心意，祝您早日康復</p>
+  </header>
+
+  <!-- 團隊照片輪播 -->
+  <div class="photo-carousel-section">
+    <h3>💚 我們是最棒的鈕酷樂團隊</h3>
+    <div class="carousel-container">
+      <div class="carousel-wrapper">
+        <div class="carousel-track" id="carouselTrack">
+          <div class="loading">
+            <div class="loading-spinner"></div>
+            <p>載入照片中...</p>
+          </div>
+        </div>
+      </div>
+      <button class="carousel-btn prev" onclick="prevSlide()" aria-label="上一張">‹</button>
+      <button class="carousel-btn next" onclick="nextSlide()" aria-label="下一張">›</button>
+      <div class="carousel-indicators" id="carouselIndicators"></div>
+    </div>
+  </div>
+
+  <div class="messages-section">
+    <h2>所有祝福留言</h2>
+    
+    <div class="stats">
+      <div class="stat-item">
+        <span class="stat-number" id="messageCount">0</span>
+        <span class="stat-label">則留言</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number" id="participantCount">0</span>
+        <span class="stat-label">位同事</span>
+      </div>
+    </div>
+
+    <div id="messagesContainer">
+      <div class="loading">
+        <div class="loading-spinner"></div>
+        <p>載入留言中...</p>
+      </div>
+    </div>
+
+    <div class="messages-grid" id="messagesGrid" style="display: none;">
+    </div>
+  </div>
+</div>
+
+<!-- 浮動新增留言按鈕 -->
+<button class="floating-btn" onclick="openModal()">
+  <span>✍️</span>
+  <span>我要留言</span>
+</button>
+
+<!-- 留言表單彈窗 -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    
+    <h2>✨ 留下您的祝福</h2>
+
+    <div class="form-group">
+      <label>選擇頭像 *</label>
+      <div class="avatar-grid" id="avatarGrid">
+        <div class="loading" style="grid-column: 1 / -1;">載入頭像中...</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="name">我是 *</label>
+      <input type="text" id="name" placeholder="請輸入您的名字" required>
+    </div>
+
+    <div class="form-group">
+      <label>選擇禮物 *</label>
+      <div class="gift-grid" id="giftGrid">
+        <div class="loading" style="grid-column: 1 / -1;">載入禮物中...</div>
+      </div>
+    </div>
+
+    <div class="gift-message-section" id="giftMessageSection">
+      <div class="form-group">
+        <label for="messageTypeSelect">禮物訊息類型 *</label>
+        <select class="message-type-select" id="messageTypeSelect" onchange="onMessageTypeChange()">
+          <option value="">請選擇...</option>
+          <option value="custom">自己填寫</option>
+          <option value="textA" id="optionTextA">參考範例 1</option>
+          <option value="textB" id="optionTextB">參考範例 2</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="giftMessageInput">禮物訊息內容 *</label>
+        <textarea class="gift-message-input" id="giftMessageInput" placeholder="請在上方選擇訊息類型，或直接輸入您的祝福..."></textarea>
+      </div>
+    </div>
+
+    <button class="submit-btn" id="submitBtn" onclick="submitMessage()">送出祝福 💚</button>
+  </div>
+</div>
+
+<!-- 自訂提示彈窗 -->
+<div class="custom-alert" id="customAlert">
+  <div class="custom-alert-content">
+    <div class="custom-alert-icon" id="alertIcon">✅</div>
+    <div class="custom-alert-title" id="alertTitle">成功</div>
+    <div class="custom-alert-message" id="alertMessage">操作成功！</div>
+    <button class="custom-alert-btn" onclick="closeCustomAlert()">確定</button>
+  </div>
+</div>
+
+<script>
+// 照片資料
+var photos = [
+  {photo_ID: 'pic_01', photo_FILE_ID: '1qL2xnFV_4o4cjM3UGlMkIit0A_IEks6A', is_main: true},
+  {photo_ID: 'pic_02', photo_FILE_ID: '1ATpJB8v2cgaN5tGLr9K6mbfoVwRcVEPd', is_main: false},
+  {photo_ID: 'pic_03', photo_FILE_ID: '1Bq1LvDozNN2sw2ihQuF7fpxrp8EBEv4B', is_main: false},
+  {photo_ID: 'pic_04', photo_FILE_ID: '1tzeS85R8g-iw9PKq_c7eBd5zQ0zhj9_J', is_main: false}
+];
+
+var avatars = [];
+var gifts = [];
+var messages = [];
+var selectedAvatar = null;
+var selectedGift = null;
+var selectedMessageType = null;
+
+// 輪播相關變數
+var currentSlide = 0;
+var autoSlideInterval = null;
+
+// 自訂提示彈窗函數
+function showCustomAlert(message, title, icon) {
+  title = title || '提示';
+  icon = icon || '✅';
+  
+  document.getElementById('alertIcon').textContent = icon;
+  document.getElementById('alertTitle').textContent = title;
+  document.getElementById('alertMessage').innerHTML = message.replace(/\n/g, '<br>');
+  document.getElementById('customAlert').classList.add('show');
+}
+
+function closeCustomAlert() {
+  document.getElementById('customAlert').classList.remove('show');
+}
+
+window.addEventListener('DOMContentLoaded', function() {
+  renderPhotos();
+  startAutoSlide();
+  loadData();
+});
+
+function loadData() {
+  const API_URL = 'https://script.google.com/macros/s/AKfycbyRc_iNv6Tvd8BiXJYImabepXO9PsMEH9IexoRdSU1GtAHGRA-KUf1St0UcHq-4gmU86g/exec';
+  
+  fetch(API_URL + '?action=getData')
+    .then(response => response.json())
+    .then(data => onDataLoaded(data))
+    .catch(error => onDataLoadError(error));
+}
+
+function onDataLoaded(data) {
+  if (data.success) {
+    avatars = data.avatars || [];
+    gifts = data.gifts || [];
+    messages = data.messages || [];
+    
+    renderAvatars();
+    renderGifts();
+    renderMessages();
+    updateStats();
+  } else {
+    showError('載入資料失敗：' + (data.error || '未知錯誤'));
+  }
+}
+
+function onDataLoadError(error) {
+  showError('無法連接到伺服器：' + (error.message || error.toString()));
+}
+
+function showError(message) {
+  var container = document.getElementById('messagesContainer');
+  container.innerHTML = '<div class="error-message">' + message + '</div>';
+}
+
+// 渲染照片輪播
+function renderPhotos() {
+  var track = document.getElementById('carouselTrack');
+  var indicators = document.getElementById('carouselIndicators');
+  
+  if (!photos || photos.length === 0) {
+    track.innerHTML = '<p style="padding: 40px; text-align: center; color: #999;">沒有可顯示的照片</p>';
+    return;
+  }
+  
+  var slidesHTML = '';
+  var indicatorsHTML = '';
+  
+  photos.forEach(function(photo, index) {
+    var imageUrl = 'https://drive.google.com/thumbnail?id=' + photo.photo_FILE_ID + '&sz=w1000';
+    slidesHTML += '<div class="carousel-slide"><img src="' + imageUrl + '" alt="團隊照片 ' + (index + 1) + '" loading="lazy"></div>';
+    indicatorsHTML += '<div class="indicator' + (index === 0 ? ' active' : '') + '" onclick="goToSlide(' + index + ')"></div>';
+  });
+  
+  track.innerHTML = slidesHTML;
+  indicators.innerHTML = indicatorsHTML;
+}
+
+function goToSlide(index) {
+  currentSlide = index;
+  updateCarousel();
+  resetAutoSlide();
+}
+
+function nextSlide() {
+  currentSlide = (currentSlide + 1) % photos.length;
+  updateCarousel();
+  resetAutoSlide();
+}
+
+function prevSlide() {
+  currentSlide = (currentSlide - 1 + photos.length) % photos.length;
+  updateCarousel();
+  resetAutoSlide();
+}
+
+function updateCarousel() {
+  var track = document.getElementById('carouselTrack');
+  var indicators = document.querySelectorAll('.indicator');
+  
+  track.style.transform = 'translateX(-' + (currentSlide * 100) + '%)';
+  
+  indicators.forEach(function(indicator, index) {
+    if (index === currentSlide) {
+      indicator.classList.add('active');
+    } else {
+      indicator.classList.remove('active');
+    }
+  });
+}
+
+function startAutoSlide() {
+  autoSlideInterval = setInterval(function() {
+    nextSlide();
+  }, 5000);
+}
+
+function resetAutoSlide() {
+  clearInterval(autoSlideInterval);
+  startAutoSlide();
+}
+
+function renderAvatars() {
+  var grid = document.getElementById('avatarGrid');
+  
+  if (!avatars || avatars.length === 0) {
+    grid.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: #999;">沒有可用的頭像</p>';
+    return;
+  }
+  
+  grid.innerHTML = avatars.map(function(avatar) {
+    var imageUrl = 'https://drive.google.com/thumbnail?id=' + avatar.avatar_FILE_ID + '&sz=w200';
+    return '<div class="avatar-option" data-id="' + avatar.avatar_ID + '" onclick="selectAvatar(\'' + avatar.avatar_ID + '\')">' +
+      '<img src="' + imageUrl + '" alt="' + avatar.avatar_Option + '" loading="lazy">' +
+      '</div>';
+  }).join('');
+}
+
+function selectAvatar(avatarId) {
+  selectedAvatar = avatarId;
+  
+  document.querySelectorAll('.avatar-option').forEach(function(opt) {
+    opt.classList.remove('selected');
+  });
+  
+  document.querySelector('.avatar-option[data-id="' + avatarId + '"]').classList.add('selected');
+}
+
+function renderGifts() {
+  var grid = document.getElementById('giftGrid');
+  
+  if (!gifts || gifts.length === 0) {
+    grid.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: #999;">沒有可用的禮物</p>';
+    return;
+  }
+  
+  grid.innerHTML = gifts.map(function(gift) {
+    var imageUrl = 'https://drive.google.com/thumbnail?id=' + gift.gift_FILE_ID + '&sz=w200';
+    return '<div class="gift-option" data-id="' + gift.gift_ID + '" onclick="selectGift(\'' + gift.gift_ID + '\')">' +
+      '<img src="' + imageUrl + '" alt="' + gift.gift_Option + '" loading="lazy">' +
+      '<div class="gift-name">' + gift.gift_Option + '</div>' +
+      '</div>';
+  }).join('');
+}
+
+function selectGift(giftId) {
+  selectedGift = giftId;
+  selectedMessageType = null;
+  
+  document.querySelectorAll('.gift-option').forEach(function(opt) {
+    opt.classList.remove('selected');
+  });
+  
+  document.querySelector('.gift-option[data-id="' + giftId + '"]').classList.add('selected');
+  
+  showGiftMessageOptions(giftId);
+}
+
+function showGiftMessageOptions(giftId) {
+  var gift = gifts.find(function(g) { return g.gift_ID === giftId; });
+  if (!gift) return;
+  
+  var section = document.getElementById('giftMessageSection');
+  var select = document.getElementById('messageTypeSelect');
+  var optionTextA = document.getElementById('optionTextA');
+  var optionTextB = document.getElementById('optionTextB');
+  var input = document.getElementById('giftMessageInput');
+  
+  if (gift.Default_textA) {
+    optionTextA.textContent = '參考範例 1：' + (gift.Default_textA.substring(0, 20) + '...');
+    optionTextA.setAttribute('data-text', gift.Default_textA);
+    optionTextA.style.display = '';
+  } else {
+    optionTextA.style.display = 'none';
+  }
+  
+  if (gift.Default_textB) {
+    optionTextB.textContent = '參考範例 2：' + (gift.Default_textB.substring(0, 20) + '...');
+    optionTextB.setAttribute('data-text', gift.Default_textB);
+    optionTextB.style.display = '';
+  } else {
+    optionTextB.style.display = 'none';
+  }
+  
+  select.value = '';
+  input.value = '';
+  selectedMessageType = null;
+  
+  section.classList.add('active');
+}
+
+function onMessageTypeChange() {
+  var select = document.getElementById('messageTypeSelect');
+  var input = document.getElementById('giftMessageInput');
+  var selectedOption = select.options[select.selectedIndex];
+  
+  selectedMessageType = select.value;
+  
+  if (select.value === 'custom') {
+    input.value = '';
+    input.placeholder = '請輸入您的祝福訊息...';
+  } else if (select.value === 'textA' || select.value === 'textB') {
+    var defaultText = selectedOption.getAttribute('data-text');
+    input.value = defaultText || '';
+    input.placeholder = '您可以修改上方的範例文字...';
+  } else {
+    input.value = '';
+    input.placeholder = '請在上方選擇訊息類型...';
+  }
+}
+
+function submitMessage() {
+  if (!selectedAvatar) {
+    showCustomAlert('請選擇頭像', '提醒', '⚠️');
+    return;
+  }
+  
+  var name = document.getElementById('name').value.trim();
+  if (!name) {
+    showCustomAlert('請輸入您的名字', '提醒', '⚠️');
+    return;
+  }
+  
+  if (!selectedGift) {
+    showCustomAlert('請選擇禮物', '提醒', '⚠️');
+    return;
+  }
+  
+  if (!selectedMessageType) {
+    showCustomAlert('請選擇禮物訊息類型', '提醒', '⚠️');
+    return;
+  }
+  
+  var giftMessage = document.getElementById('giftMessageInput').value.trim();
+  if (!giftMessage) {
+    showCustomAlert('請輸入禮物訊息', '提醒', '⚠️');
+    return;
+  }
+  
+  var btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = '送出中...';
+  
+  const API_URL = 'https://script.google.com/macros/s/AKfycbyRc_iNv6Tvd8BiXJYImabepXO9PsMEH9IexoRdSU1GtAHGRA-KUf1St0UcHq-4gmU86g/exec';
+  
+  fetch(API_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      timestamp: new Date().toISOString(),
+      name: name,
+      message: '',
+      color: '#FFFFFF',
+      avatar_id: selectedAvatar,
+      gift_id: selectedGift,
+      custom_message: giftMessage
+    })
+  })
+  .then(response => response.json())
+  .then(result => onMessageSubmitted(result))
+  .catch(error => onMessageSubmitError(error));
+}
+
+function onMessageSubmitted(result) {
+  var btn = document.getElementById('submitBtn');
+  btn.disabled = false;
+  btn.textContent = '送出祝福 💚';
+  
+  if (result.success) {
+    showCustomAlert('祝福已送出！感謝您的關心！<br><br>請稍等一下，留言就會出現囉', '送出成功', '🌿');
+    closeModal();
+    resetForm();
+    loadData();
+  } else {
+    showCustomAlert('送出失敗：' + (result.error || '未知錯誤'), '錯誤', '❌');
+  }
+}
+
+function onMessageSubmitError(error) {
+  var btn = document.getElementById('submitBtn');
+  btn.disabled = false;
+  btn.textContent = '送出祝福 💚';
+  showCustomAlert('送出失敗：' + (error.message || error.toString()), '錯誤', '❌');
+}
+
+function resetForm() {
+  document.getElementById('name').value = '';
+  document.getElementById('messageTypeSelect').value = '';
+  document.getElementById('giftMessageInput').value = '';
+  
+  selectedAvatar = null;
+  selectedGift = null;
+  selectedMessageType = null;
+  
+  document.querySelectorAll('.avatar-option').forEach(function(opt) {
+    opt.classList.remove('selected');
+  });
+  
+  document.querySelectorAll('.gift-option').forEach(function(opt) {
+    opt.classList.remove('selected');
+  });
+  
+  document.getElementById('giftMessageSection').classList.remove('active');
+}
+
+function renderMessages() {
+  var container = document.getElementById('messagesContainer');
+  var grid = document.getElementById('messagesGrid');
+  
+  container.style.display = 'none';
+  
+  if (!messages || messages.length === 0) {
+    grid.innerHTML = '<div class="empty-state" style="column-span: all; break-inside: avoid;">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
+      '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>' +
+      '</svg>' +
+      '<p>還沒有任何留言，成為第一位送上祝福的人吧！</p>' +
+      '</div>';
+    grid.style.display = 'block';
+    return;
+  }
+  
+  grid.innerHTML = messages.map(function(msg) {
+    var avatar = avatars.find(function(a) { return a.avatar_ID === msg.avatar_id; });
+    var gift = gifts.find(function(g) { return g.gift_ID === msg.gift_id; });
+    
+    var avatarUrl = avatar ? 'https://drive.google.com/thumbnail?id=' + avatar.avatar_FILE_ID + '&sz=w200' : '';
+    var giftUrl = gift ? 'https://drive.google.com/thumbnail?id=' + gift.gift_FILE_ID + '&sz=w200' : '';
+    
+    var date = new Date(msg.timestamp);
+    var timeStr = date.toLocaleDateString('zh-TW', { 
+      month: 'long', 
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+    
+    return '<div class="message-card">' +
+      '<div class="card-header">' +
+      '<img src="' + avatarUrl + '" alt="頭像" class="card-avatar" loading="lazy">' +
+      '<div class="card-author-info">' +
+      '<div class="card-author-name">' + escapeHtml(msg.name || '同事祝福') + '</div>' +
+      '<div class="card-timestamp">' + timeStr + '</div>' +
+      '</div>' +
+      '</div>' +
+      '<div class="card-footer">' +
+      '<img src="' + giftUrl + '" alt="禮物" class="card-gift-image" loading="lazy">' +
+      '<div class="card-gift-message">' + escapeHtml(msg.custom_message) + '</div>' +
+      '</div>' +
+      '</div>';
+  }).join('');
+  
+  grid.style.display = 'block';
+}
+
+function updateStats() {
+  document.getElementById('messageCount').textContent = messages.length;
+  
+  var uniqueNames = {};
+  messages.forEach(function(m) {
+    if (m.name && m.name.trim()) {
+      uniqueNames[m.name.toLowerCase()] = true;
+    }
+  });
+  document.getElementById('participantCount').textContent = Object.keys(uniqueNames).length;
+}
+
+function openModal() {
+  document.getElementById('modalOverlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('active');
+  document.body.style.overflow = 'auto';
+}
+
+function closeModalOnOverlay(event) {
+  if (event.target === event.currentTarget) {
+    closeModal();
+  }
+}
+
+function escapeHtml(text) {
+  var div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+</script>
+
+</body>
+</html>
