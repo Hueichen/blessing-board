@@ -78,27 +78,17 @@ h1 {
   line-height: 1.2;
 }
 
-h1 .title-main {
-  font-size: 0.85em;
-  display: block;
-}
-
-h1 .title-sub {
-  font-size: 1em;
-  display: block;
-}
-
-.mobile-break {
+h1 br {
   display: none;
 }
 
 @media (max-width: 768px) {
-  h1 {
-    line-height: 1.3;
+  h1 br {
+    display: block;
   }
   
-  h1 .title-main {
-    font-size: 0.8em;
+  h1 {
+    line-height: 1.3;
   }
 }
 
@@ -1075,7 +1065,7 @@ textarea {
 
 <div class="container">
   <header>
-    <h1><span class="title-main">給老闆的</span><br><span class="title-sub">元氣補給站</span></h1>
+    <h1>給老闆的<br>元氣補給站</h1>
     <p class="subtitle">凝聚我們的心意，祝您早日康復</p>
   </header>
 
@@ -1587,7 +1577,14 @@ function updateStats() {
       uniqueNames[m.name.toLowerCase()] = true;
     }
   });
-  document.getElementById('participantCount').textContent = Object.keys(uniqueNames).length;
+  
+  var participantCount = Object.keys(uniqueNames).length;
+  // 如果沒有名字但有留言，至少顯示留言數量
+  if (participantCount === 0 && messages.length > 0) {
+    participantCount = messages.length;
+  }
+  
+  document.getElementById('participantCount').textContent = participantCount;
 }
 
 function openModal() {
