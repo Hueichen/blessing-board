@@ -1426,24 +1426,21 @@ function submitMessage() {
   
   const API_URL = 'https://script.google.com/macros/s/AKfycbyN6kDQQURwKbAJ6w3HedIEhpORnELsCydRfYQT9YbQvv-xgrBXjIc1-BbWsEsVPxgbLw/exec';
   
-  fetch(API_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      timestamp: new Date().toISOString(),
-      name: name,
-      message: '',
-      color: '#FFFFFF',
-      avatar_id: selectedAvatar,
-      gift_id: selectedGift,
-      custom_message: giftMessage
-    })
-  })
-  .then(response => response.json())
-  .then(result => onMessageSubmitted(result))
-  .catch(error => onMessageSubmitError(error));
+  // 使用 GET 方式傳送資料（避免 CORS 問題）
+  const params = new URLSearchParams({
+    action: 'addMessage',
+    timestamp: new Date().toISOString(),
+    name: name,
+    color: '#FFFFFF',
+    avatar_id: selectedAvatar,
+    gift_id: selectedGift,
+    custom_message: giftMessage
+  });
+  
+  fetch(API_URL + '?' + params.toString())
+    .then(response => response.json())
+    .then(result => onMessageSubmitted(result))
+    .catch(error => onMessageSubmitError(error));
 }
 
 function onMessageSubmitted(result) {
