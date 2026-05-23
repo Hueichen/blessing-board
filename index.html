@@ -1165,12 +1165,8 @@ textarea {
     
     <div class="stats">
       <div class="stat-item">
-        <span class="stat-number" id="messageCount">0</span>
-        <span class="stat-label">則留言</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-number" id="participantCount">0</span>
-        <span class="stat-label">位同事</span>
+        <span class="stat-number" id="energyCount">0</span>
+        <span class="stat-label">元氣值</span>
       </div>
     </div>
 
@@ -1689,22 +1685,7 @@ function renderMessages() {
 }
 
 function updateStats() {
-  document.getElementById('messageCount').textContent = messages.length;
-  
-  var uniqueNames = {};
-  messages.forEach(function(m) {
-    if (m.name && m.name.trim()) {
-      uniqueNames[m.name.toLowerCase()] = true;
-    }
-  });
-  
-  var participantCount = Object.keys(uniqueNames).length;
-  // 如果沒有名字但有留言，至少顯示留言數量
-  if (participantCount === 0 && messages.length > 0) {
-    participantCount = messages.length;
-  }
-  
-  document.getElementById('participantCount').textContent = participantCount;
+  document.getElementById('energyCount').textContent = messages.length;
 }
 
 function openModal() {
