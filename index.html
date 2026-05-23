@@ -636,6 +636,12 @@ textarea {
   text-align: center;
 }
 
+.stat-item.energy-display {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
 .stat-number {
   font-size: 3rem;
   font-weight: 700;
@@ -643,10 +649,19 @@ textarea {
   display: block;
 }
 
+.energy-display .stat-number {
+  display: inline;
+}
+
 .stat-label {
   color: #777;
   font-size: 1.1rem;
   margin-top: 4px;
+}
+
+.energy-display .stat-label {
+  margin-top: 0;
+  order: -1;
 }
 
 .messages-grid {
@@ -922,6 +937,10 @@ textarea {
     margin-bottom: 35px;
   }
 
+  .stat-item.energy-display {
+    gap: 10px;
+  }
+
   .stat-number {
     font-size: 48px !important;
   }
@@ -1161,13 +1180,12 @@ textarea {
   </div>
 
   <div class="messages-section">
-    <h2>祝福留言</h2>
+    <h2>所有祝福留言</h2>
     
     <div class="stats">
-      <div class="stat-item">
-        
-        <span class="stat-label">元氣值</span>
-        <span class="stat-number" id="energyCount">+0</span>
+      <div class="stat-item energy-display">
+        <span class="stat-label">元氣值+</span>
+        <span class="stat-number" id="energyCount">0</span>
       </div>
     </div>
 
