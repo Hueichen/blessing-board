@@ -892,18 +892,18 @@ textarea {
   
   .messages-section {
     padding: 30px 15px;
-    margin-top: 100px !important;
+    margin-top: 120px !important;
     position: relative !important;
   }
 
   .pikmin-decoration {
     position: absolute !important;
-    top: -80px !important;
+    top: -95px !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
     width: 95% !important;
     max-width: 400px !important;
-    height: 95px !important;
+    height: 100px !important;
     z-index: 10 !important;
   }
 
@@ -1037,16 +1037,16 @@ textarea {
 
   .messages-section {
     padding: 25px 12px;
-    margin-top: 100px !important;
+    margin-top: 120px !important;
     position: relative !important;
   }
 
   .pikmin-decoration {
     position: absolute !important;
-    top: -80px !important;
+    top: -95px !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
-    height: 95px !important;
+    height: 100px !important;
     width: 95% !important;
     max-width: 400px !important;
     z-index: 10 !important;
@@ -1230,9 +1230,9 @@ textarea {
     </div>
   </div>
 
-  <div class="messages-section" style="position: relative; margin-top: 110px;">
+  <div class="messages-section" style="position: relative; margin-top: 120px;">
     <!-- 皮克敏裝飾 -->
-    <div class="pikmin-decoration" style="position: absolute; top: -85px; left: 50%; transform: translateX(-50%); width: 95%; max-width: 400px; height: 95px; z-index: 10; display: flex; align-items: flex-end; justify-content: center; pointer-events: none;">
+    <div class="pikmin-decoration" style="position: absolute; top: -95px; left: 50%; transform: translateX(-50%); width: 95%; max-width: 400px; height: 100px; z-index: 10; display: flex; align-items: flex-end; justify-content: center; pointer-events: none;">
       <img src="https://drive.google.com/thumbnail?id=1Vl4n9loZJltsU9SRB8_RraKVSiVijyTr&sz=w800" alt="皮克敏" loading="lazy" style="width: 100%; height: auto; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));">
     </div>
     
@@ -1241,6 +1241,7 @@ textarea {
     <div class="stats">
       <div class="stat-item energy-display">
         <span class="stat-label">元氣值</span>
+        <span class="stat-number">+</span>
         <span class="stat-number" id="energyCount">0</span>
       </div>
     </div>
@@ -1408,18 +1409,18 @@ window.addEventListener('DOMContentLoaded', function() {
     if (window.innerWidth <= 768) {
       console.log('Applying mobile styles...');
       if (messagesSection) {
-        messagesSection.style.setProperty('margin-top', '110px', 'important');
+        messagesSection.style.setProperty('margin-top', '120px', 'important');
         messagesSection.style.setProperty('position', 'relative', 'important');
         console.log('Messages section margin-top set to:', messagesSection.style.marginTop);
       }
       if (pikminDecoration) {
         pikminDecoration.style.setProperty('position', 'absolute', 'important');
-        pikminDecoration.style.setProperty('top', '-85px', 'important');
+        pikminDecoration.style.setProperty('top', '-95px', 'important');
         pikminDecoration.style.setProperty('left', '50%', 'important');
         pikminDecoration.style.setProperty('transform', 'translateX(-50%)', 'important');
         pikminDecoration.style.setProperty('width', '95%', 'important');
         pikminDecoration.style.setProperty('max-width', '400px', 'important');
-        pikminDecoration.style.setProperty('height', '95px', 'important');
+        pikminDecoration.style.setProperty('height', '100px', 'important');
         pikminDecoration.style.setProperty('z-index', '10', 'important');
         console.log('Pikmin decoration top set to:', pikminDecoration.style.top);
       }
