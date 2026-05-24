@@ -1401,19 +1401,27 @@ window.addEventListener('DOMContentLoaded', function() {
     var messagesSection = document.querySelector('.messages-section');
     var pikminDecoration = document.querySelector('.pikmin-decoration');
     
+    console.log('Window width:', window.innerWidth);
+    console.log('Messages section found:', !!messagesSection);
+    console.log('Pikmin decoration found:', !!pikminDecoration);
+    
     if (window.innerWidth <= 768) {
+      console.log('Applying mobile styles...');
       if (messagesSection) {
-        messagesSection.style.marginTop = '110px';
-        messagesSection.style.position = 'relative';
+        messagesSection.style.setProperty('margin-top', '110px', 'important');
+        messagesSection.style.setProperty('position', 'relative', 'important');
+        console.log('Messages section margin-top set to:', messagesSection.style.marginTop);
       }
       if (pikminDecoration) {
-        pikminDecoration.style.position = 'absolute';
-        pikminDecoration.style.top = '-85px';
-        pikminDecoration.style.left = '50%';
-        pikminDecoration.style.transform = 'translateX(-50%)';
-        pikminDecoration.style.width = '95%';
-        pikminDecoration.style.maxWidth = '400px';
-        pikminDecoration.style.height = '95px';
+        pikminDecoration.style.setProperty('position', 'absolute', 'important');
+        pikminDecoration.style.setProperty('top', '-85px', 'important');
+        pikminDecoration.style.setProperty('left', '50%', 'important');
+        pikminDecoration.style.setProperty('transform', 'translateX(-50%)', 'important');
+        pikminDecoration.style.setProperty('width', '95%', 'important');
+        pikminDecoration.style.setProperty('max-width', '400px', 'important');
+        pikminDecoration.style.setProperty('height', '95px', 'important');
+        pikminDecoration.style.setProperty('z-index', '10', 'important');
+        console.log('Pikmin decoration top set to:', pikminDecoration.style.top);
       }
     }
   }
