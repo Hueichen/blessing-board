@@ -892,14 +892,19 @@ textarea {
   
   .messages-section {
     padding: 30px 15px;
-    margin-top: 100px;
+    margin-top: 100px !important;
+    position: relative !important;
   }
 
   .pikmin-decoration {
-    top: -80px;
-    width: 95%;
-    max-width: 400px;
-    height: 95px;
+    position: absolute !important;
+    top: -80px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: 95% !important;
+    max-width: 400px !important;
+    height: 95px !important;
+    z-index: 10 !important;
   }
 
   .messages-section h2 {
@@ -1033,11 +1038,18 @@ textarea {
   .messages-section {
     padding: 25px 12px;
     margin-top: 100px !important;
+    position: relative !important;
   }
 
   .pikmin-decoration {
+    position: absolute !important;
     top: -80px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
     height: 95px !important;
+    width: 95% !important;
+    max-width: 400px !important;
+    z-index: 10 !important;
   }
 
   .messages-section h2 {
@@ -1229,7 +1241,6 @@ textarea {
     <div class="stats">
       <div class="stat-item energy-display">
         <span class="stat-label">元氣值</span>
-        <span class="stat-number">+</span>
         <span class="stat-number" id="energyCount">0</span>
       </div>
     </div>
