@@ -615,6 +615,31 @@ textarea {
   padding: 40px;
   box-shadow: 0 10px 40px rgba(47, 82, 51, 0.1);
   margin-bottom: 100px;
+  position: relative;
+  margin-top: 80px;
+}
+
+/* 皮克敏裝飾 - 趴在框框上方 */
+.pikmin-decoration {
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 600px;
+  height: 80px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.pikmin-decoration img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
 }
 
 .messages-section h2 {
@@ -867,6 +892,14 @@ textarea {
   
   .messages-section {
     padding: 30px 15px;
+    margin-top: 70px;
+  }
+
+  .pikmin-decoration {
+    top: -50px;
+    width: 95%;
+    max-width: 400px;
+    height: 60px;
   }
 
   .messages-section h2 {
@@ -1180,11 +1213,17 @@ textarea {
   </div>
 
   <div class="messages-section">
+    <!-- 皮克敏裝飾 -->
+    <div class="pikmin-decoration">
+      <img src="https://drive.google.com/thumbnail?id=1Vl4n9loZJltsU9SRB8_RraKVSiVijyTr&sz=w800" alt="皮克敏" loading="lazy">
+    </div>
+    
     <h2>所有祝福留言</h2>
     
     <div class="stats">
       <div class="stat-item energy-display">
-        <span class="stat-label">元氣值</span>+
+        <span class="stat-label">元氣值</span>
+        <span class="stat-number">+</span>
         <span class="stat-number" id="energyCount">0</span>
       </div>
     </div>
