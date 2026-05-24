@@ -119,6 +119,7 @@ h1 br {
   border-radius: 20px;
   padding: 50px 40px;
   margin-bottom: 40px;
+  margin-top: 110px;
   box-shadow: 0 10px 40px rgba(47, 82, 51, 0.1);
   position: relative;
   overflow: visible;
@@ -130,6 +131,29 @@ h1 br {
   color: #2F5233;
   margin-bottom: 40px;
   font-weight: 600;
+}
+
+/* 坐姿皮克敏裝飾 */
+.sitting-pikmin-decoration {
+  position: absolute;
+  top: -95px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 600px;
+  height: 105px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.sitting-pikmin-decoration img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
 }
 
 .carousel-container {
@@ -1265,7 +1289,6 @@ textarea {
     <div class="stats">
       <div class="stat-item energy-display">
         <span class="stat-label">元氣值</span>
-        <span class="stat-number">+</span>
         <span class="stat-number" id="energyCount">0</span>
       </div>
     </div>
