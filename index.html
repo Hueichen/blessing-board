@@ -1185,7 +1185,6 @@ textarea {
     <div class="stats">
       <div class="stat-item energy-display">
         <span class="stat-label">元氣值</span>
-        <span class="stat-number">+</span>
         <span class="stat-number" id="energyCount">0</span>
       </div>
     </div>
@@ -1297,6 +1296,18 @@ var photos = [
   {photo_ID: 'pic_04', photo_FILE_ID: '1tzeS85R8g-iw9PKq_c7eBd5zQ0zhj9_J', is_main: false}
 ];
 
+// 預設頭像資料（如果 API 載入失敗時使用）
+var defaultAvatars = [
+  {avatar_ID: 'p01', avatar_Option: '紅皮', avatar_FILE_ID: '1H1xGajjhcai2-mmj-HZMwt47UQ6NQC-o'},
+  {avatar_ID: 'p02', avatar_Option: '黃皮', avatar_FILE_ID: '1HtGhBisIJwHS4gpMwr4THzKwmhVK5asv'},
+  {avatar_ID: 'p03', avatar_Option: '藍皮', avatar_FILE_ID: '11WSYZXL0E4BmB4d647pR5lYujmKGT3ce'},
+  {avatar_ID: 'p04', avatar_Option: '紫皮', avatar_FILE_ID: '1e9WbLUn4XO2fP11jtubcPfjAq7SuCGU6'},
+  {avatar_ID: 'p05', avatar_Option: '白皮', avatar_FILE_ID: '1CFE-23Wj2OeJW3oCcScEx5_SRIzDkX4o'},
+  {avatar_ID: 'p06', avatar_Option: '岩皮', avatar_FILE_ID: '15j-FXycYvDfSHYFeU1S0nzfAn1XW3sfH'},
+  {avatar_ID: 'p07', avatar_Option: '羽翅皮', avatar_FILE_ID: '1YA51Vx4Wd9tiotUnECwVPq0hYBR2jcfA'},
+  {avatar_ID: 'p08', avatar_Option: '冰皮', avatar_FILE_ID: '1Og3H4DhQFOocgKyg_Bzm-SKBD2Q6zXN3'}
+];
+
 var avatars = [];
 var gifts = [];
 var messages = [];
@@ -1341,7 +1352,7 @@ function loadData() {
 
 function onDataLoaded(data) {
   if (data.success) {
-    avatars = data.avatars || [];
+    avatars = data.avatars && data.avatars.length > 0 ? data.avatars : defaultAvatars;
     gifts = data.gifts || [];
     messages = data.messages || [];
     
