@@ -124,16 +124,6 @@ h1 br {
   overflow: hidden;
 }
 
-.photo-carousel-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 6px;
-  background: linear-gradient(90deg, #2F5233, #6AA84F, #93C47D);
-}
-
 .photo-carousel-section h3 {
   text-align: center;
   font-size: 1.8rem;
@@ -850,18 +840,18 @@ textarea {
   .photo-carousel-section {
     padding: 25px 15px;
     margin-bottom: 25px;
-    margin-top: 100px !important;
+    margin-top: 110px !important;
     position: relative !important;
   }
 
   .sitting-pikmin-decoration {
     position: absolute !important;
-    top: -85px !important;
+    top: -95px !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
     width: 95% !important;
     max-width: 400px !important;
-    height: 95px !important;
+    height: 105px !important;
     z-index: 10 !important;
   }
 
@@ -1066,16 +1056,16 @@ textarea {
   }
 
   .photo-carousel-section {
-    margin-top: 100px !important;
+    margin-top: 110px !important;
     position: relative !important;
   }
 
   .sitting-pikmin-decoration {
     position: absolute !important;
-    top: -85px !important;
+    top: -95px !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
-    height: 95px !important;
+    height: 105px !important;
     width: 95% !important;
     max-width: 400px !important;
     z-index: 10 !important;
@@ -1242,9 +1232,9 @@ textarea {
   </header>
 
   <!-- 團隊照片輪播 -->
-  <div class="photo-carousel-section" style="position: relative; margin-top: 100px;">
+  <div class="photo-carousel-section" style="position: relative; margin-top: 110px;">
     <!-- 坐姿皮克敏裝飾 -->
-    <div class="sitting-pikmin-decoration" style="position: absolute; top: -85px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 600px; height: 95px; z-index: 10; display: flex; align-items: flex-end; justify-content: center; pointer-events: none;">
+    <div class="sitting-pikmin-decoration" style="position: absolute; top: -95px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 600px; height: 105px; z-index: 10; display: flex; align-items: flex-end; justify-content: center; pointer-events: none;">
       <img src="https://drive.google.com/thumbnail?id=1Vl4n9loZJltsU9SRB8_RraKVSiVijyTr&sz=w800" alt="坐姿皮克敏" loading="lazy" style="width: 100%; height: auto; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));">
     </div>
     
@@ -1466,17 +1456,17 @@ window.addEventListener('DOMContentLoaded', function() {
       
       // 照片區坐姿皮克敏
       if (photoSection) {
-        photoSection.style.setProperty('margin-top', '100px', 'important');
+        photoSection.style.setProperty('margin-top', '110px', 'important');
         photoSection.style.setProperty('position', 'relative', 'important');
       }
       if (sittingPikmin) {
         sittingPikmin.style.setProperty('position', 'absolute', 'important');
-        sittingPikmin.style.setProperty('top', '-85px', 'important');
+        sittingPikmin.style.setProperty('top', '-95px', 'important');
         sittingPikmin.style.setProperty('left', '50%', 'important');
         sittingPikmin.style.setProperty('transform', 'translateX(-50%)', 'important');
         sittingPikmin.style.setProperty('width', '95%', 'important');
         sittingPikmin.style.setProperty('max-width', '400px', 'important');
-        sittingPikmin.style.setProperty('height', '95px', 'important');
+        sittingPikmin.style.setProperty('height', '105px', 'important');
         sittingPikmin.style.setProperty('z-index', '10', 'important');
         console.log('Sitting pikmin top set to:', sittingPikmin.style.top);
       }
