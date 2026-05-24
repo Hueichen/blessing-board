@@ -1230,9 +1230,9 @@ textarea {
     </div>
   </div>
 
-  <div class="messages-section" style="position: relative;">
+  <div class="messages-section" style="position: relative; margin-top: 110px;">
     <!-- 皮克敏裝飾 -->
-    <div class="pikmin-decoration" style="position: absolute; top: -80px; left: 50%; transform: translateX(-50%); width: 95%; max-width: 400px; height: 95px; z-index: 10; display: flex; align-items: flex-end; justify-content: center; pointer-events: none;">
+    <div class="pikmin-decoration" style="position: absolute; top: -85px; left: 50%; transform: translateX(-50%); width: 95%; max-width: 400px; height: 95px; z-index: 10; display: flex; align-items: flex-end; justify-content: center; pointer-events: none;">
       <img src="https://drive.google.com/thumbnail?id=1Vl4n9loZJltsU9SRB8_RraKVSiVijyTr&sz=w800" alt="皮克敏" loading="lazy" style="width: 100%; height: auto; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));">
     </div>
     
@@ -1241,7 +1241,6 @@ textarea {
     <div class="stats">
       <div class="stat-item energy-display">
         <span class="stat-label">元氣值</span>
-        <span class="stat-number">+</span>
         <span class="stat-number" id="energyCount">0</span>
       </div>
     </div>
@@ -1404,12 +1403,12 @@ window.addEventListener('DOMContentLoaded', function() {
     
     if (window.innerWidth <= 768) {
       if (messagesSection) {
-        messagesSection.style.marginTop = '100px';
+        messagesSection.style.marginTop = '110px';
         messagesSection.style.position = 'relative';
       }
       if (pikminDecoration) {
         pikminDecoration.style.position = 'absolute';
-        pikminDecoration.style.top = '-80px';
+        pikminDecoration.style.top = '-85px';
         pikminDecoration.style.left = '50%';
         pikminDecoration.style.transform = 'translateX(-50%)';
         pikminDecoration.style.width = '95%';
