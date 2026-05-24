@@ -119,10 +119,19 @@ h1 br {
   border-radius: 20px;
   padding: 50px 40px;
   margin-bottom: 40px;
-  margin-top: 95px;
   box-shadow: 0 10px 40px rgba(47, 82, 51, 0.1);
   position: relative;
-  overflow: visible;
+  overflow: hidden;
+}
+
+.photo-carousel-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, #2F5233, #6AA84F, #93C47D);
 }
 
 .photo-carousel-section h3 {
@@ -131,29 +140,6 @@ h1 br {
   color: #2F5233;
   margin-bottom: 40px;
   font-weight: 600;
-}
-
-/* 坐姿皮克敏裝飾 */
-.sitting-pikmin-decoration {
-  position: absolute;
-  top: -75px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 90%;
-  max-width: 600px;
-  height: 85px;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  pointer-events: none;
-  z-index: 10;
-}
-
-.sitting-pikmin-decoration img {
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
 }
 
 .carousel-container {
@@ -196,7 +182,7 @@ h1 br {
   border-radius: 50%;
   cursor: pointer;
   font-size: 1.5rem;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   transition: all 0.3s;
@@ -864,19 +850,6 @@ textarea {
   .photo-carousel-section {
     padding: 25px 15px;
     margin-bottom: 25px;
-    margin-top: 110px !important;
-    position: relative !important;
-  }
-
-  .sitting-pikmin-decoration {
-    position: absolute !important;
-    top: -95px !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    width: 95% !important;
-    max-width: 400px !important;
-    height: 105px !important;
-    z-index: 10 !important;
   }
 
   .photo-carousel-section h3 {
@@ -1079,22 +1052,6 @@ textarea {
     z-index: 10 !important;
   }
 
-  .photo-carousel-section {
-    margin-top: 110px !important;
-    position: relative !important;
-  }
-
-  .sitting-pikmin-decoration {
-    position: absolute !important;
-    top: -95px !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    height: 105px !important;
-    width: 95% !important;
-    max-width: 400px !important;
-    z-index: 10 !important;
-  }
-
   .messages-section h2 {
     font-size: 28px !important;
   }
@@ -1256,12 +1213,7 @@ textarea {
   </header>
 
   <!-- 團隊照片輪播 -->
-  <div class="photo-carousel-section" style="position: relative; margin-top: 110px;">
-    <!-- 坐姿皮克敏裝飾 -->
-    <div class="sitting-pikmin-decoration" style="position: absolute; top: -95px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 600px; height: 105px; z-index: 10; display: flex; align-items: flex-end; justify-content: center; pointer-events: none;">
-      <img src="https://drive.google.com/thumbnail?id=1uGrfacIvaMzSoJTulLwwGucg7uWYnIlI&sz=w800" alt="坐姿皮克敏" loading="lazy" style="width: 100%; height: auto; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));">
-    </div>
-    
+  <div class="photo-carousel-section">
     <h3>💚 最棒的鈕酷樂團隊</h3>
     <div class="carousel-container">
       <div class="carousel-wrapper">
@@ -1449,14 +1401,10 @@ window.addEventListener('DOMContentLoaded', function() {
   function fixMobilePikmin() {
     var messagesSection = document.querySelector('.messages-section');
     var pikminDecoration = document.querySelector('.pikmin-decoration');
-    var photoSection = document.querySelector('.photo-carousel-section');
-    var sittingPikmin = document.querySelector('.sitting-pikmin-decoration');
     
     console.log('Window width:', window.innerWidth);
     console.log('Messages section found:', !!messagesSection);
     console.log('Pikmin decoration found:', !!pikminDecoration);
-    console.log('Photo section found:', !!photoSection);
-    console.log('Sitting pikmin found:', !!sittingPikmin);
     
     if (window.innerWidth <= 768) {
       console.log('Applying mobile styles...');
@@ -1477,23 +1425,6 @@ window.addEventListener('DOMContentLoaded', function() {
         pikminDecoration.style.setProperty('height', '100px', 'important');
         pikminDecoration.style.setProperty('z-index', '10', 'important');
         console.log('Pikmin decoration top set to:', pikminDecoration.style.top);
-      }
-      
-      // 照片區坐姿皮克敏
-      if (photoSection) {
-        photoSection.style.setProperty('margin-top', '110px', 'important');
-        photoSection.style.setProperty('position', 'relative', 'important');
-      }
-      if (sittingPikmin) {
-        sittingPikmin.style.setProperty('position', 'absolute', 'important');
-        sittingPikmin.style.setProperty('top', '-95px', 'important');
-        sittingPikmin.style.setProperty('left', '50%', 'important');
-        sittingPikmin.style.setProperty('transform', 'translateX(-50%)', 'important');
-        sittingPikmin.style.setProperty('width', '95%', 'important');
-        sittingPikmin.style.setProperty('max-width', '400px', 'important');
-        sittingPikmin.style.setProperty('height', '105px', 'important');
-        sittingPikmin.style.setProperty('z-index', '10', 'important');
-        console.log('Sitting pikmin top set to:', sittingPikmin.style.top);
       }
     }
   }
