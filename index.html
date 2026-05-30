@@ -1300,19 +1300,6 @@ textarea {
 </head>
 <body>
 
-<!-- 載入提示 -->
-<div id="initialLoader" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; z-index: 1000;">
-  <div style="width: 50px; height: 50px; border: 4px solid #D9E7D6; border-top: 4px solid #6AA84F; border-radius: 50%; animation: loaderSpin 1s linear infinite; margin: 0 auto 15px;"></div>
-  <p style="color: #2F5233; font-size: 1rem; font-weight: 600;">載入中...</p>
-</div>
-
-<style>
-@keyframes loaderSpin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-</style>
-
 <div class="container">
   <header>
     <h1>給老闆的<br>元氣補給站</h1>
@@ -1348,6 +1335,7 @@ textarea {
     <div class="stats">
       <div class="stat-item energy-display">
         <span class="stat-label">元氣值</span>
+        <span class="stat-number">+</span>
         <span class="stat-number" id="energyCount">0</span>
       </div>
     </div>
@@ -1559,11 +1547,8 @@ function onDataLoaded(data) {
     renderMessages();
     updateStats();
     
-    // 隱藏載入動畫
-    var loader = document.getElementById('initialLoader');
-    if (loader) {
-      loader.style.display = 'none';
-    }
+    // 載入已保存的反應數據
+    loadReactionsData();
   } else {
     showError('載入資料失敗：' + (data.error || '未知錯誤'));
   }
@@ -1957,6 +1942,34 @@ var REACTION_EMOJIS = ['❤️', '👍', '😂', '😮', '😳', '❓'];
 // 存儲反應數據（格式：{ "timestamp": { "❤️": 3, "👍": 2 } }）
 var reactionsData = {};
 
+// 從後端載入反應數據
+function loadReactionsData() {
+  const API_URL = 'https://script.google.com/macros/s/AKfycbyN6kDQQURwKbAJ6w3HedIEhpORnELsCydRfYQT9YbQvv-xgrBXjIc1-BbWsEsVPxgbLw/exec';
+  
+  fetch(API_URL + '?action=getReactions')
+    .then(response => response.json())
+    .then(data => {
+      if (data.success && data.reactions) {
+        console.log('載入反應數據：', data.reactions);
+        
+        data.reactions.forEach(function(r) {
+          if (!reactionsData[r.message_id]) {
+            reactionsData[r.message_id] = {};
+          }
+          reactionsData[r.message_id][r.reaction] = r.count;
+        });
+        
+        // 更新所有留言的反應顯示
+        messages.forEach(function(msg) {
+          updateReactionsDisplay(msg.timestamp);
+        });
+      }
+    })
+    .catch(function(err) {
+      console.log('載入反應數據時出錯：', err);
+    });
+}
+
 // 顯示反應選擇器
 function showReactionPicker(btn, messageId) {
   // 移除其他已打開的選擇器
@@ -2007,7 +2020,7 @@ function addReaction(messageId, emoji) {
   // 更新顯示
   updateReactionsDisplay(messageId);
   
-  // 存儲到後端（可選）
+  // 存儲到後端
   saveReaction(messageId, emoji, reactionsData[messageId][emoji]);
 }
 
@@ -2053,15 +2066,16 @@ function updateReactionsDisplay(messageId) {
 function saveReaction(messageId, emoji, count) {
   const API_URL = 'https://script.google.com/macros/s/AKfycbyN6kDQQURwKbAJ6w3HedIEhpORnELsCydRfYQT9YbQvv-xgrBXjIc1-BbWsEsVPxgbLw/exec';
   
-  const params = new URLSearchParams({
-    action: 'addReaction',
-    message_id: messageId,
-    reaction: emoji,
-    count: count
-  });
+  var params = 'action=addReaction&message_id=' + encodeURIComponent(messageId) + '&reaction=' + encodeURIComponent(emoji) + '&count=' + count;
   
   // 異步保存，不阻止 UI
-  fetch(API_URL + '?' + params.toString())
+  fetch(API_URL + '?' + params)
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(data) {
+      console.log('反應已保存：', messageId, emoji, count);
+    })
     .catch(function(err) {
       console.log('反應保存中...', err);
     });
