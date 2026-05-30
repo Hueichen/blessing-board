@@ -771,6 +771,100 @@ textarea {
   letter-spacing: 0.3px;
 }
 
+/* 反應功能 */
+.card-reactions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px 0 0 0;
+  border-top: 1px solid #F0F4F1;
+  position: relative;
+}
+
+.reaction-btn {
+  background: none;
+  border: 1px solid #D9E7D6;
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #666;
+}
+
+.reaction-btn:hover {
+  background: #F0F4F1;
+  border-color: #6AA84F;
+}
+
+.reaction-picker {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  background: white;
+  border: 2px solid #D9E7D6;
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 100;
+  margin-bottom: 10px;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reaction-emoji {
+  background: none;
+  border: none;
+  font-size: 1.3rem;
+  cursor: pointer;
+  padding: 4px;
+  transition: all 0.2s;
+  border-radius: 6px;
+}
+
+.reaction-emoji:hover {
+  background: #F0F4F1;
+  transform: scale(1.2);
+}
+
+.reactions-display {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.reaction-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #F0F4F1;
+  border-radius: 16px;
+  padding: 4px 10px;
+  font-size: 0.9rem;
+  color: #666;
+  border: 1px solid #D9E7D6;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.reaction-count:hover {
+  background: #E8F1E5;
+  border-color: #6AA84F;
+}
+
 /* 載入中 */
 .loading {
   text-align: center;
@@ -1206,6 +1300,19 @@ textarea {
 </head>
 <body>
 
+<!-- 載入提示 -->
+<div id="initialLoader" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; z-index: 1000;">
+  <div style="width: 50px; height: 50px; border: 4px solid #D9E7D6; border-top: 4px solid #6AA84F; border-radius: 50%; animation: loaderSpin 1s linear infinite; margin: 0 auto 15px;"></div>
+  <p style="color: #2F5233; font-size: 1rem; font-weight: 600;">載入中...</p>
+</div>
+
+<style>
+@keyframes loaderSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>
+
 <div class="container">
   <header>
     <h1>給老闆的<br>元氣補給站</h1>
@@ -1241,7 +1348,6 @@ textarea {
     <div class="stats">
       <div class="stat-item energy-display">
         <span class="stat-label">元氣值</span>
-        <span class="stat-number">+</span>
         <span class="stat-number" id="energyCount">0</span>
       </div>
     </div>
@@ -1452,6 +1558,12 @@ function onDataLoaded(data) {
     renderGifts();
     renderMessages();
     updateStats();
+    
+    // 隱藏載入動畫
+    var loader = document.getElementById('initialLoader');
+    if (loader) {
+      loader.style.display = 'none';
+    }
   } else {
     showError('載入資料失敗：' + (data.error || '未知錯誤'));
   }
@@ -1801,6 +1913,10 @@ function renderMessages() {
       '<img src="' + giftUrl + '" alt="禮物" class="card-gift-image" loading="lazy">' +
       '<div class="card-gift-message">' + escapeHtml(msg.custom_message) + '</div>' +
       '</div>' +
+      '<div class="card-reactions">' +
+      '<button class="reaction-btn" onclick="showReactionPicker(this, \'' + msg.timestamp + '\')" title="新增反應">👍</button>' +
+      '<div class="reactions-display" id="reactions-' + msg.timestamp + '"></div>' +
+      '</div>' +
       '</div>';
   }).join('');
   
@@ -1831,6 +1947,124 @@ function escapeHtml(text) {
   var div = document.createElement('div');
   div.textContent = text;
   return div.innerHTML;
+}
+
+// ========== 反應功能 ==========
+
+// 反應表情符號
+var REACTION_EMOJIS = ['❤️', '👍', '😂', '😮', '😳', '❓'];
+
+// 存儲反應數據（格式：{ "timestamp": { "❤️": 3, "👍": 2 } }）
+var reactionsData = {};
+
+// 顯示反應選擇器
+function showReactionPicker(btn, messageId) {
+  // 移除其他已打開的選擇器
+  document.querySelectorAll('.reaction-picker').forEach(function(el) {
+    el.remove();
+  });
+  
+  var picker = document.createElement('div');
+  picker.className = 'reaction-picker';
+  
+  REACTION_EMOJIS.forEach(function(emoji) {
+    var emojiBtn = document.createElement('button');
+    emojiBtn.className = 'reaction-emoji';
+    emojiBtn.textContent = emoji;
+    emojiBtn.onclick = function(e) {
+      e.stopPropagation();
+      addReaction(messageId, emoji);
+      picker.remove();
+    };
+    picker.appendChild(emojiBtn);
+  });
+  
+  btn.parentElement.insertBefore(picker, btn);
+  
+  // 點擊外面關閉
+  setTimeout(function() {
+    document.addEventListener('click', function closeOnClick(e) {
+      if (!picker.contains(e.target) && e.target !== btn) {
+        picker.remove();
+        document.removeEventListener('click', closeOnClick);
+      }
+    });
+  }, 0);
+}
+
+// 添加反應
+function addReaction(messageId, emoji) {
+  if (!reactionsData[messageId]) {
+    reactionsData[messageId] = {};
+  }
+  
+  if (!reactionsData[messageId][emoji]) {
+    reactionsData[messageId][emoji] = 0;
+  }
+  
+  reactionsData[messageId][emoji]++;
+  
+  // 更新顯示
+  updateReactionsDisplay(messageId);
+  
+  // 存儲到後端（可選）
+  saveReaction(messageId, emoji, reactionsData[messageId][emoji]);
+}
+
+// 移除反應
+function removeReaction(messageId, emoji) {
+  if (reactionsData[messageId] && reactionsData[messageId][emoji] > 0) {
+    reactionsData[messageId][emoji]--;
+    
+    if (reactionsData[messageId][emoji] === 0) {
+      delete reactionsData[messageId][emoji];
+    }
+    
+    updateReactionsDisplay(messageId);
+    saveReaction(messageId, emoji, reactionsData[messageId][emoji] || 0);
+  }
+}
+
+// 更新反應顯示
+function updateReactionsDisplay(messageId) {
+  var displayEl = document.getElementById('reactions-' + messageId);
+  if (!displayEl) return;
+  
+  displayEl.innerHTML = '';
+  
+  if (reactionsData[messageId]) {
+    Object.keys(reactionsData[messageId]).forEach(function(emoji) {
+      var count = reactionsData[messageId][emoji];
+      if (count > 0) {
+        var countEl = document.createElement('div');
+        countEl.className = 'reaction-count';
+        countEl.textContent = emoji + ' ' + count;
+        countEl.onclick = function() {
+          removeReaction(messageId, emoji);
+        };
+        countEl.title = '點擊移除';
+        displayEl.appendChild(countEl);
+      }
+    });
+  }
+}
+
+// 保存反應到後端
+function saveReaction(messageId, emoji, count) {
+  const API_URL = 'https://script.google.com/macros/s/AKfycbyN6kDQQURwKbAJ6w3HedIEhpORnELsCydRfYQT9YbQvv-xgrBXjIc1-BbWsEsVPxgbLw/exec';
+  
+  const params = new URLSearchParams({
+    action: 'addReaction',
+    message_id: messageId,
+    reaction: emoji,
+    count: count
+  });
+  
+  // 異步保存，不阻止 UI
+  fetch(API_URL + '?' + params.toString())
+    .catch(function(err) {
+      console.log('反應保存中...', err);
+    });
 }
 </script>
 
