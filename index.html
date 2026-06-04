@@ -2053,9 +2053,9 @@ function updateReactionsDisplay(messageId) {
         countEl.className = 'reaction-count';
         countEl.textContent = emoji + ' ' + count;
         countEl.onclick = function() {
-          removeReaction(messageId, emoji);
+          addReaction(messageId, emoji);
         };
-        countEl.title = '點擊移除';
+        countEl.title = '點擊加一個';
         displayEl.appendChild(countEl);
       }
     });
