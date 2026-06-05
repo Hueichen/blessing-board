@@ -690,9 +690,8 @@ textarea {
 }
 
 .messages-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 30px;
+  column-count: 3;
+  column-gap: 30px;
   margin-top: 30px;
 }
 
@@ -706,7 +705,8 @@ textarea {
   border: 2px solid #F0F4F1;
   position: relative;
   break-inside: avoid;
-  margin-bottom: 0;
+  margin-bottom: 30px;
+  display: inline-block;
   width: 100%;
 }
 
@@ -918,9 +918,8 @@ textarea {
   }
 
   .messages-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 25px;
+    column-count: 2;
+    column-gap: 25px;
   }
 }
 
@@ -1008,9 +1007,8 @@ textarea {
   }
   
   .messages-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 20px;
+    column-count: 1;
+    column-gap: 0;
   }
 
   .message-card {
@@ -1302,7 +1300,7 @@ textarea {
 /* Footer 樣式 */
 .page-footer {
   background: linear-gradient(135deg, #2F5233 0%, #3D6B41 100%);
-  padding: 12px 15px;
+  padding: 12px 15px 70px 15px;
   text-align: center;
   margin-top: 40px;
   border-top: 2px solid #6AA84F;
@@ -1346,7 +1344,7 @@ textarea {
 
 @media (max-width: 768px) {
   .page-footer {
-    padding: 10px 12px;
+    padding: 10px 12px 80px 12px;
     margin-top: 30px;
   }
   
