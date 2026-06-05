@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -691,8 +690,9 @@ textarea {
 }
 
 .messages-grid {
-  column-count: 3;
-  column-gap: 30px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
   margin-top: 30px;
 }
 
@@ -706,8 +706,7 @@ textarea {
   border: 2px solid #F0F4F1;
   position: relative;
   break-inside: avoid;
-  margin-bottom: 30px;
-  display: inline-block;
+  margin-bottom: 0;
   width: 100%;
 }
 
@@ -919,8 +918,9 @@ textarea {
   }
 
   .messages-grid {
-    column-count: 2;
-    column-gap: 25px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
   }
 }
 
@@ -1008,8 +1008,9 @@ textarea {
   }
   
   .messages-grid {
-    column-count: 1;
-    column-gap: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
 
   .message-card {
@@ -1297,6 +1298,67 @@ textarea {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(106, 168, 79, 0.4);
 }
+
+/* Footer 樣式 */
+.page-footer {
+  background: linear-gradient(135deg, #2F5233 0%, #3D6B41 100%);
+  padding: 12px 15px;
+  text-align: center;
+  margin-top: 40px;
+  border-top: 2px solid #6AA84F;
+  position: relative;
+  z-index: 50;
+}
+
+.footer-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: white;
+}
+
+.footer-label {
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.footer-status {
+  display: none;
+}
+
+.footer-count {
+  font-weight: 700;
+  font-size: 0.9rem;
+  min-width: 25px;
+  text-align: center;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-footer {
+    padding: 10px 12px;
+    margin-top: 30px;
+  }
+  
+  .footer-content {
+    gap: 6px;
+    font-size: 0.8rem;
+  }
+  
+  .footer-count {
+    font-size: 0.85rem;
+  }
+}
 </style>
 </head>
 <body>
@@ -1358,6 +1420,15 @@ textarea {
   <span>✍️</span>
   <span>我要留言</span>
 </button>
+
+<!-- Footer -->
+<footer class="page-footer">
+  <div class="footer-content">
+    <span class="footer-label">現在在線</span>
+    <span class="footer-status">🟢</span>
+    <span class="footer-count" id="onlineCount">0</span>
+  </div>
+</footer>
 
 <!-- 留言表單彈窗 -->
 <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
@@ -1547,6 +1618,9 @@ function onDataLoaded(data) {
     renderGifts();
     renderMessages();
     updateStats();
+    
+    // 初始化在線檢測
+    initOnlineDetection();
     
     // 載入已保存的反應數據
     loadReactionsData();
@@ -1935,6 +2009,68 @@ function escapeHtml(text) {
   return div.innerHTML;
 }
 
+// ========== 在線狀態檢測 ==========
+
+var onlineCheckInterval;
+var userId;
+
+function initOnlineDetection() {
+  // 設置用戶ID
+  userId = localStorage.getItem('userId');
+  if (!userId) {
+    userId = 'user_' + new Date().getTime() + '_' + Math.random();
+    localStorage.setItem('userId', userId);
+  }
+  
+  // 立即報告在線
+  reportOnline();
+  
+  // 每 10 秒更新一次
+  onlineCheckInterval = setInterval(function() {
+    reportOnline();
+    updateOnlineCount();
+  }, 10000);
+  
+  // 初始化顯示
+  updateOnlineCount();
+}
+
+function reportOnline() {
+  const API_URL = 'https://script.google.com/macros/s/AKfycbyN6kDQQURwKbAJ6w3HedIEhpORnELsCydRfYQT9YbQvv-xgrBXjIc1-BbWsEsVPxgbLw/exec';
+  
+  var params = 'action=updateOnline&user_id=' + encodeURIComponent(userId);
+  
+  fetch(API_URL + '?' + params)
+    .catch(function(err) {
+      console.log('更新在線狀態...');
+    });
+}
+
+function updateOnlineCount() {
+  const API_URL = 'https://script.google.com/macros/s/AKfycbyN6kDQQURwKbAJ6w3HedIEhpORnELsCydRfYQT9YbQvv-xgrBXjIc1-BbWsEsVPxgbLw/exec';
+  
+  fetch(API_URL + '?action=getOnlineCount')
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(data) {
+      if (data.success) {
+        var countEl = document.getElementById('onlineCount');
+        if (countEl) {
+          countEl.textContent = data.onlineCount;
+        }
+      }
+    })
+    .catch(function(err) {
+      console.log('取得在線人數...');
+    });
+}
+
+// 離開頁面時清除
+window.addEventListener('beforeunload', function() {
+  clearInterval(onlineCheckInterval);
+});
+
 // ========== 反應功能 ==========
 
 // 反應表情符號
@@ -1943,7 +2079,6 @@ var REACTION_EMOJIS = ['❤️', '👍', '😂', '😮', '😳', '❓'];
 // 存儲反應數據（格式：{ "timestamp": { "❤️": 3, "👍": 2 } }）
 var reactionsData = {};
 
-// 從後端載入反應數據
 function loadReactionsData() {
   const API_URL = 'https://script.google.com/macros/s/AKfycbyN6kDQQURwKbAJ6w3HedIEhpORnELsCydRfYQT9YbQvv-xgrBXjIc1-BbWsEsVPxgbLw/exec';
   
