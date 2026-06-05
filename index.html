@@ -690,9 +690,8 @@ textarea {
 }
 
 .messages-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 30px;
+  column-count: 3;
+  column-gap: 30px;
   margin-top: 30px;
 }
 
@@ -706,8 +705,9 @@ textarea {
   border: 2px solid #F0F4F1;
   position: relative;
   break-inside: avoid;
-  margin-bottom: 0;
-  display: block;
+  margin-bottom: 30px;
+  display: inline-block;
+  width: 100%;
 }
 
 .message-card:hover {
@@ -918,9 +918,8 @@ textarea {
   }
 
   .messages-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 25px;
+    column-count: 2;
+    column-gap: 25px;
   }
 }
 
@@ -1008,9 +1007,8 @@ textarea {
   }
   
   .messages-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 20px;
+    column-count: 1;
+    column-gap: 0;
   }
 
   .message-card {
